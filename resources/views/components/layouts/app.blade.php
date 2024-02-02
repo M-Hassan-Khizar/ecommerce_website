@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
 @livewireStyles
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 
@@ -51,26 +52,25 @@
                     </div>
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info header-info-right">
-                            {{-- @auth
 
+                            @auth
                             <ul>
                                 <li>
                                     <i class="fi-rs-user"></i> {{ Auth::user()->name }} /
-                                    <form method="POST" action={{ route('logout') }}>
+                                    <form method="POST" action="{{ route('logout') }}">
                                         @csrf
+                                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                    </form>
 
-                                   <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
-                                </form>
-                            </li>
+                                </li>
                             </ul>
-                           @else
-                           <ul>
-                            <li><i class="fi-rs-user"></i> {{ Auth::user()->name }} /
-
-                             <a href="{{ route('logout') }}">Logout</a></li>
-                        </ul>
-
-                            @endif --}}
+                        @else
+                            <ul>
+                                <li><i class="fi-rs-key"></i>
+                                    <a href="{{ route('login') }}">Login</a> /  <a href="{{ route('register') }}">sign up</a>
+                                </li>
+                            </ul>
+                        @endauth
 
                         </div>
                     </div>
@@ -400,17 +400,25 @@
                                     <li><a href="blog.html">Blog </a></li>
                                     <li><a href="contact.html">Contact</a></li>
                                     <li><a href="#">My Account<i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="#">Dashboard</a></li>
-                                            <li><a href="#">Products</a></li>
-                                            <li><a href="#">Categories</a></li>
-                                            <li><a href="#">Coupons</a></li>
-                                            <li><a href="#">Orders</a></li>
-                                            <li><a href="#">Customers</a></li>
-                                            <li><a href="#">Logout</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
+
+                                        @auth
+                                        @if(Auth::user()->utype==='ADM')
+                                            <ul class="sub-menu">
+                                                <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                                                <li><a href="#">Products</a></li>
+                                                <li><a href="#">Categories</a></li>
+                                                <li><a href="#">Coupons</a></li>
+                                                <li><a href="#">Orders</a></li>
+                                                <li><a href="#">Customers</a></li>
+                                                <li><a href="#">Logout</a></li>
+                                            </ul>
+                                        @else
+                                            <ul class="sub-menu">
+                                                <li><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
+                                            </ul>
+                                        @endif
+                                    @endauth
+
                             </nav>
                         </div>
                     </div>

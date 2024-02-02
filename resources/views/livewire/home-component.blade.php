@@ -1,4 +1,5 @@
 <div>
+
     <div>
         <main class="main">
             <section class="home-slider position-relative pt-50">
@@ -37,7 +38,7 @@
                                 </div>
                                 <div class="col-lg-7 col-md-6">
                                     <div class="single-slider-img single-slider-img-1">
-                                        <img class="animated slider-1-2" src="assets/imgs/slider/slider-2.png" alt="">
+                                        <img class="animated slider-1-2" src="{{ asset('assets/imgs/slider/slider-2.png') }}" alt="">
                                     </div>
                                 </div>
                             </div>

@@ -1,10 +1,14 @@
 <?php
 
 use App\Livewire\CartComponent;
-use App\Livewire\CheckoutComponent;
 use App\Livewire\HomeComponent;
 use App\Livewire\ShopComponent;
+use App\Livewire\CheckoutComponent;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use App\Livewire\User\UserDashboardComponent;
+use App\Livewire\Admin\AdminDashboardComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,20 +21,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::view('/', 'welcome');
+Route::get('/', HomeComponent::class)->name('home.index');
+Route::get('/shop', ShopComponent::class)->name('shop');
+Route::get('/cart', CartComponent::class)->name('shop.cart');
+Route::get('/checkout', CheckoutComponent::class)->name('shop.checkout');
 
-Route::get('/',HomeComponent::class)->name('home.index');
-Route::get('/shop',ShopComponent::class)->name('shop');
-Route::get('/cart',CartComponent::class)->name('shop.cart');
-Route::get('/checkout',CheckoutComponent::class)->name('shop.checkout');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/dashboard', UserDashboardComponent::class)->name('user.dashboard');
+});
 
+Route::middleware(['auth', 'authadmin'])->group(function () {
+    Route::get('/admin/dashboard', AdminDashboardComponent::class)->name('admin.dashboard');
+});
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
+Route::post('/logout', function () {
+    Auth::guard('web')->logout();
+    Session::invalidate();
+    Session::regenerateToken();
+    return redirect('/');
+})->name('logout');
 
 require __DIR__.'/auth.php';
